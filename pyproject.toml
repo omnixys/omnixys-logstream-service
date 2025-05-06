@@ -1,0 +1,85 @@
+[project]
+name = "logstream-service"
+version = "2025.05.02"
+description = "logstream Microservice mit FastAPI, Keycloak, Kafka"
+readme = "README.md"
+authors = [{ name = "Caleb Gyamfi", email = "caleb-script@outlook.de" }]
+maintainers = [{ name = "Caleb Gyamfi", email = "caleb-script@outlook.de" }]
+requires-python = ">=3.13"
+
+dependencies = [
+  "fastapi[standard]",
+  "hypercorn>=0.17.3",
+  "loguru>=0.7.3",
+  "python-dotenv",              # .env-Verwaltung
+  "pydantic-settings",          # Settings mit Pydantic v2
+  "python-keycloak",            # Keycloak Auth
+  "aiokafka",                   # Kafka Client
+  "httpx",                      # Async HTTP Client
+  "openpyxl>=3.1.5",
+  "python-jose[cryptography]>=3.3.0",
+  "pyfiglet>=1.0.2",  # ASCII-Banner für Logs oder CLI
+  "tabulate>=0.9.0",
+  "loguru",
+  "aiokafka",
+]
+
+[project.scripts]
+logstream = "logstream:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project.urls]
+homepage = "https://www.gentlecorp-systems.com"
+documentation = "https://readthedocs.org"
+repository = "https://github.com/gentlecorp/logstream"
+changelog = "https://github.com/gentlecorp/logstream/blob/main/CHANGELOG.md"
+
+[dependency-groups]
+build = ["hatch", "hatchling"]
+
+dev = [
+  "pytest",
+  "pytest-asyncio",
+  "pytest-html",
+  "requests",
+  "locust",
+]
+
+cli = [
+  "typer[all]>=0.9.0"
+]
+
+alerts = [
+  "fastapi-mail",
+  "httpx"
+]
+
+doc = [
+  "mkdocs",
+  "mkdocs-material",
+  "mkdocs-material-extensions",
+  "mkdocstrings[python]",
+  "mkdocstrings-python",
+  "griffe",
+  "mistune",
+]
+
+lint = [
+  "ruff",
+  "safety",
+  "vulture",
+  "types-tabulate",
+]
+
+
+[tool.hatch.build.targets.sdist]
+include = ["src/logstream"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/logstream"]
+
+[tool.uv]
+default-groups = "all"
