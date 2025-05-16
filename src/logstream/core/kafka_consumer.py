@@ -6,10 +6,10 @@ import asyncio
 import json
 import re
 from aiokafka import AIOKafkaConsumer
-from typing import Awaitable, Callable, Optional
+from typing import Optional
+from collections.abc import Awaitable, Callable
 from loguru import logger
-from logstream.services.alert_service import AlertService
-from logstream.services.loki_client import push_log_to_loki
+from logstream.core.loki_client import push_log_to_loki
 
 
 class KafkaConsumerService:
@@ -33,9 +33,9 @@ class KafkaConsumerService:
             auto_offset_reset="earliest",  # wichtig für lokale Tests
         )
         await self._consumer.start()
-        self._consumer.subscribe(pattern=re.compile(r"^activity\..+\.log$"))
+        self._consumer.subscribe(pattern=re.compile(r"^logstream\.log\..+$"))
         self._task = asyncio.create_task(self._consume())
-        logger.info("✅ Kafka-Consumer hört auf Topics wie activity.*.log")
+        logger.info("✅ Kafka-Consumer hört auf Topics wie logstream.log.*")
 
     async def stop(self) -> None:
         """Beendet den Kafka-Consumer und den Hintergrundtask."""
@@ -55,11 +55,12 @@ class KafkaConsumerService:
             async for msg in self._consumer:
                 logger.debug(f"📥 Kafka-Log empfangen: {msg.topic} – {msg.value}")
                 payload = msg.value
-                handler = self._handlers.get(msg.topic)
-                if handler:
-                    await handler(payload)
-                else:
-                    await self.handle_shutdown_log(payload)
+                handler = next(
+                    (h for topic, h in self._handlers.items() if re.fullmatch(topic, msg.topic)),
+                    self.handle_shutdown_log
+                )
+                await handler(payload)
+                await (handler or self.handle_shutdown_log)(payload)
         except Exception as e:
             logger.error(f"❌ Fehler im Kafka-Consumer: {e}")
 
@@ -81,10 +82,6 @@ class KafkaConsumerService:
             )
 
             logger.success(f"📤 Log an Loki gesendet: {service} - {log_message}")
-
-            # Optional: Alert bei kritischen Logs
-            if level in ["ERROR", "AUDIT"]:
-                await AlertService.send_alert(data)
 
         except Exception as e:
             logger.warning(f"⚠️ Fehler bei Log-Verarbeitung: {e}")

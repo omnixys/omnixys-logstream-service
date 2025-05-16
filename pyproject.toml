@@ -8,20 +8,29 @@ maintainers = [{ name = "Caleb Gyamfi", email = "caleb-script@outlook.de" }]
 requires-python = ">=3.13"
 
 dependencies = [
-  "fastapi[standard]",
-  "hypercorn>=0.17.3",
-  "loguru>=0.7.3",
-  "python-dotenv",              # .env-Verwaltung
-  "pydantic-settings",          # Settings mit Pydantic v2
-  "python-keycloak",            # Keycloak Auth
-  "aiokafka",                   # Kafka Client
-  "httpx",                      # Async HTTP Client
-  "openpyxl>=3.1.5",
-  "python-jose[cryptography]>=3.3.0",
-  "pyfiglet>=1.0.2",  # ASCII-Banner für Logs oder CLI
-  "tabulate>=0.9.0",
-  "loguru",
-  "aiokafka",
+           # --- Kafka ---
+    "aiokafka",                        # Kafka Client
+    "orjson",                          # Schnellere JSON bib
+
+    # --- Web & Core ---
+    "fastapi[standard]",
+    "python-dotenv",                    # .env-Verwaltung
+    "pydantic-settings",            # Settings mit Pydantic v2
+
+    # --- Observability ---
+    "loguru>=0.7.3",
+    "opentelemetry-api>=1.14.0",
+    "opentelemetry-exporter-otlp",   # OTLP Export zu Tempo
+    "opentelemetry-exporter-prometheus", # Prometheus Export
+    "opentelemetry-instrumentation-fastapi>=0.46b0",
+    "opentelemetry-instrumentation-pymongo",
+    "opentelemetry-sdk>=1.14.0",
+    "prometheus-fastapi-instrumentator",
+
+    "httpx",                           # Async HTTP Client
+    "hypercorn>=0.17.3",              # ASGI Server
+    "pyfiglet>=1.0.2",  # ASCII-Banner für Logs oder CLI
+    "tabulate>=0.9.0",  # um tabellen im log zu erstellen
 ]
 
 [project.scripts]
@@ -32,9 +41,9 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project.urls]
-homepage = "https://www.gentlecorp-systems.com"
+homepage = "https://www.omnixys.com"
+repository = "https://github.com/omnixys/omnixys-logstream-service"
 documentation = "https://readthedocs.org"
-repository = "https://github.com/gentlecorp/logstream"
 changelog = "https://github.com/gentlecorp/logstream/blob/main/CHANGELOG.md"
 
 [dependency-groups]

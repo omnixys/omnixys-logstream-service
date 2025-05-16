@@ -9,8 +9,7 @@ from logstream.banner import banner
 from logstream.banner2 import shutdown_banner
 from loguru import logger
 from logstream.core.kafka_consumer import KafkaConsumerService
-from logstream.core.settings_loader import get_settings
-from logstream.utils.retry_utils import retry_async
+from logstream.util.retry_utils import retry_async
 
 
 kafka_consumer = KafkaConsumerService()
@@ -23,15 +22,9 @@ async def lifespan(app: FastAPI):
     und sorgt für deren sauberen Shutdown beim Beenden.
     """
     logger.info("⏳ Initialisiere logstream-Service...")
-    settings = get_settings()
-
     # Retry-gestützte Initialisierung
     await retry_async(kafka_consumer.start, name="Kafka-Consumer")
 
-    if settings.app.APP_DEBUG:
-        print("Debug-Modus aktiv.")
-
-    print("Realm:", settings.keycloak.KC_SERVICE_REALM)
     banner(app.routes)
     yield  # Hier laufen die App-Routen
     logger.info("🛑 Logging-Service wird beendet...")
@@ -43,9 +36,9 @@ async def lifespan(app: FastAPI):
 def create_app() -> FastAPI:
     """Erzeugt die FastAPI-Applikation mit Lifespan."""
     app = FastAPI(
-        title="GentleCorp logstream-Service",
+        title="Omnixys logstream-Service",
         description="Zentraler Logging-Microservice mit Kafka und Loki-Anbindung",
-        version="2025.05.02",
+        version="2025.05.16",
         lifespan=lifespan,
         debug=True,
     )
