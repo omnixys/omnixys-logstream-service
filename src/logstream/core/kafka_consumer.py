@@ -4,18 +4,25 @@ KafkaConsumerService – liest Log-Nachrichten aus Kafka und verarbeitet sie.
 
 import asyncio
 import json
+import os
 import re
 from aiokafka import AIOKafkaConsumer
 from typing import Optional
 from collections.abc import Awaitable, Callable
+from dotenv import load_dotenv
 from loguru import logger
+from pydantic_settings import BaseSettings
 from logstream.core.loki_client import push_log_to_loki
 
 
 class KafkaConsumerService:
     """Asynchrone Kafka-Consumer-Logik für Log-Einträge."""
 
-    def __init__(self, bootstrap_servers: str = "localhost:9092", handlers: Optional[dict[str, Callable[[dict], Awaitable[None]]]] = None):
+    def __init__(
+        self,
+        bootstrap_servers: str = os.environ.get("KAFKA_URI", "localhost:9092"),
+        handlers: Optional[dict[str, Callable[[dict], Awaitable[None]]]] = None,
+    ):
         self._bootstrap_servers = bootstrap_servers
         self._consumer: Optional[AIOKafkaConsumer] = None
         self._task: Optional[asyncio.Task] = None

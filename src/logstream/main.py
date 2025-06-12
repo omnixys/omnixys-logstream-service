@@ -10,6 +10,7 @@ from logstream.banner2 import shutdown_banner
 from loguru import logger
 from logstream.core.kafka_consumer import KafkaConsumerService
 from logstream.util.retry_utils import retry_async
+from logstream.health.router import router as health_router
 
 
 kafka_consumer = KafkaConsumerService()
@@ -47,3 +48,5 @@ def create_app() -> FastAPI:
 
 
 app = create_app()
+
+app.include_router(health_router)

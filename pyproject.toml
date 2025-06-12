@@ -8,33 +8,34 @@ maintainers = [{ name = "Caleb Gyamfi", email = "caleb-script@outlook.de" }]
 requires-python = ">=3.13"
 
 dependencies = [
-           # --- Kafka ---
-    "aiokafka",                        # Kafka Client
-    "orjson",                          # Schnellere JSON bib
-
+    # --- Kafka ---
+    "aiokafka", # Kafka Client
+    "orjson", # Schnellere JSON bib
     # --- Web & Core ---
     "fastapi[standard]",
-    "python-dotenv",                    # .env-Verwaltung
-    "pydantic-settings",            # Settings mit Pydantic v2
-
+    "python-dotenv", # .env-Verwaltung
+    "pydantic-settings", # Settings mit Pydantic v2
     # --- Observability ---
     "loguru>=0.7.3",
     "opentelemetry-api>=1.14.0",
-    "opentelemetry-exporter-otlp",   # OTLP Export zu Tempo
+    "opentelemetry-exporter-otlp", # OTLP Export zu Tempo
     "opentelemetry-exporter-prometheus", # Prometheus Export
     "opentelemetry-instrumentation-fastapi>=0.46b0",
     "opentelemetry-instrumentation-pymongo",
     "opentelemetry-sdk>=1.14.0",
     "prometheus-fastapi-instrumentator",
-
-    "httpx",                           # Async HTTP Client
-    "hypercorn>=0.17.3",              # ASGI Server
-    "pyfiglet>=1.0.2",  # ASCII-Banner für Logs oder CLI
-    "tabulate>=0.9.0",  # um tabellen im log zu erstellen
+    "httpx", # Async HTTP Client
+    "hypercorn>=0.17.3", # ASGI Server
+    "pyfiglet>=1.0.2", # ASCII-Banner für Logs oder CLI
+    "tabulate>=0.9.0", # um tabellen im log zu erstellen
+    "motor>=3.7.1",
+    "aiohttp>=3.12.4",
+    "beanie>=1.29.0",
 ]
 
 [project.scripts]
 logstream = "logstream:main"
+doc = "mkdocs.__main__:cli"
 
 [build-system]
 requires = ["hatchling"]
@@ -44,7 +45,7 @@ build-backend = "hatchling.build"
 homepage = "https://www.omnixys.com"
 repository = "https://github.com/omnixys/omnixys-logstream-service"
 documentation = "https://readthedocs.org"
-changelog = "https://github.com/gentlecorp/logstream/blob/main/CHANGELOG.md"
+changelog = "https://github.com/omnixys/logstream/blob/main/CHANGELOG.md"
 
 [dependency-groups]
 build = ["hatch", "hatchling"]
@@ -55,6 +56,13 @@ dev = [
   "pytest-html",
   "requests",
   "locust",
+  "mkdocstrings[python]>=0.29.1",
+  "mkdocs-build-plantuml-plugin>=1.11.0",
+  "mkdocs>=1.6.1",
+  "mkdocs-material>=9.6.12",
+  "mkdocs-material-extensions>=1.3.1",
+  "mkdocs-get-deps>=0.2.0",
+  "ghp-import>=2.1.0",
 ]
 
 cli = [

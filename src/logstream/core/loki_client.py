@@ -1,3 +1,4 @@
+import os
 import httpx
 import time
 
@@ -28,4 +29,7 @@ async def push_log_to_loki(
         ]
     }
     async with httpx.AsyncClient() as client:
-        await client.post("http://localhost:3100/loki/api/v1/push", json=payload)
+        await client.post(
+            os.environ.get("TEMPO_URI", "http://localhost:3100/loki/api/v1/push"),
+            json=payload,
+        )
