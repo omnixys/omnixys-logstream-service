@@ -1,4 +1,4 @@
-name: Weekly Docker Push to GHCR – Omnixys Analytics Service
+name: Weekly Docker Push to GHCR – Omnixys Logstream Service
 
 on:
   schedule:
