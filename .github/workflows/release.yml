@@ -1,4 +1,4 @@
-name: Create GitHub Release – Omnixys Analytics Service
+name: Create GitHub Release – Omnixys Logstream Service
 
 on:
   workflow_dispatch:
