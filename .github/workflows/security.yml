@@ -1,4 +1,4 @@
-name: Security – Omnixys Logstream Service
+name: Security - Omnixys Logstream Service
 
 on:
     schedule:
